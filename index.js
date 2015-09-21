@@ -60,7 +60,7 @@ module.exports = function (spark, router) {
       spark: spark,
       query: query,
       body: data,
-      method: data.method || 'get',
+      method: data && data.method || 'get',
     };
 
     var fin = function fin (err) {
