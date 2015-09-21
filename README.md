@@ -1,5 +1,6 @@
 # primus-route-handler
-Declare your API via express router and communicate with it via [Primus](https://github.com/primus/primus) websocket.
+Declare your API via express [router](http://expressjs.com/4x/api.html#router)
+and communicate with it via [Primus](https://github.com/primus/primus) websocket.
 
 ### API
 This module exports single function
