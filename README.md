@@ -1,5 +1,5 @@
 # primus-route-handler
-Declare your API via express router and communicate with it via Primus websocket.
+Declare your API via express router and communicate with it via [Primus](https://github.com/primus/primus) websocket.
 
 ### API
 This module exports single function
@@ -61,13 +61,17 @@ Method defaults to `'get'`.
 
 ### Routes
 You specify routes as usually with express 4 router
-([route](https://www.npmjs.com/package/router) module should work too.)
+([router](https://www.npmjs.com/package/router) module should work too.)
 In route callbacks `req` argument can be used to gather information about request
-and `res` allows to send response and set status.
+and `res` allows to send response and set status. The same router may be usually
+mounted into your express app to handle AJAX requests.
 
 #### req
-Available standard express fields are: `req.url`, `req.query`, `req.body`, `req.method`.
-Additionally `req.spark` is available in case you want to do something specific and do not plan to use this route for ajax.
+Available standard express fields are: `req.url`, `req.query` 
+(parsed with [qs](https://github.com/hapijs/qs)), `req.body`, `req.method`.
+Additionally `req.spark` is available in case you want to do something specific
+and do not plan to use this route for ajax. You can get original request object
+via `req.spark.request`.
 
 #### res
 To send client response use `res.send(data)`. To set status use `res.status(code [, description]).send()`.
