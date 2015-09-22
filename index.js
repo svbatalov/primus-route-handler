@@ -65,7 +65,7 @@ module.exports = function (spark, router) {
 
     var fin = function fin (err) {
 
-      log('calling final handler for %j (err=%j)', req.url, err);
+      log('calling final handler for %j (method=%j, err=%j)', req.url, req.method, err);
 
       if (err) {
         if ("object" === typeof err) {
