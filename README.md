@@ -65,7 +65,7 @@ router.post('/user', addUser)
 Preferred way to specify path and optionally method is to use
 string argument of the form `METHOD::PATH`
 ```
-socket.send('api', POST::/user, {name: 'john', age: 30}, cb);
+socket.send('api', 'POST::/user', {name: 'john', age: 30}, cb);
 ```
 
 Method defaults to `'get'`.
