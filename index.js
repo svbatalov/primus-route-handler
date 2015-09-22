@@ -18,10 +18,12 @@ var log    = require('debug')('primus-express-router');
 module.exports = function (spark, router) {
   return function (path, data, fn) {
 
+    var method;
+
     if ('string' !== typeof path) {
       fn = data;
       data = path;
-      path = data.path || '/';
+      path = data && data.path || '/';
     }
 
     if ('function' === typeof data) {
@@ -32,6 +34,12 @@ module.exports = function (spark, router) {
     // parse querystring if present
     var parts = path.split('?');
     var query = qs.parse( parts[1] );
+
+    parts = path.split('::');
+    if (parts.length === 2) {
+      method = parts[0];
+      path = parts[1];
+    }
 
     var res = {
       sent: false,
@@ -60,7 +68,7 @@ module.exports = function (spark, router) {
       spark: spark,
       query: query,
       body: data,
-      method: data && data.method || 'get',
+      method: (method || data && data.method || 'get').toLowerCase(),
     };
 
     var fin = function fin (err) {
