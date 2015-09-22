@@ -17,5 +17,6 @@
   "dependencies": {
     "debug": "^2.2.0",
     "qs": "^5.1.0"
-  }
+  },
+	"browser": "browser.js"
 }
