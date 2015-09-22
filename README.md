@@ -88,5 +88,14 @@ via `req.spark.request`.
 To send client response use `res.send(data)`. To set status use `res.status(code [, description]).send()`.
 `res.send`, `res.end`, `res.json` are all the same function.
 
+### Client library
+Browserify users may require this module in client code to obtain simple api wrapper
+with standard methods `get`, `post`, `put`, `delete` and `patch`:
+```
+var socket = new Primus();
+var api = require('primus-route-handler')(socket);
+api.post('/user', {name: 'Vasja', age: 50}, function (err, res) {...});
+```
+
 ### License
 MIT
