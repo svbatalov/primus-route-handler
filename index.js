@@ -77,7 +77,7 @@ module.exports = function (spark, router) {
 
       if (err) {
         if ("object" === typeof err) {
-          return res.status(err.status || 500, err.text).send();
+          return res.status(err.status || 500, err.text || err+'').send();
         }
         return res.status(err, err + '').send();
       }

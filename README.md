@@ -101,7 +101,7 @@ api.post('/user', {name: 'Vasja', age: 50}, function (err, res) {...});
 - If there are no matching route or last route handler calls `next()` an error
 `{status: 404, statusText: 'Not Found'}` is sent to client.
 - If middleware calls `next(ErrorObject)` then  error
-`{status: ErrorObject.status || 500, statusText: ErrorObject.text}`
+`{status: ErrorObject.status || 500, statusText: ErrorObject.text || ErrorObject+''}`
  is returned to client.
 - If `next(ErrorCode)` is used then `{status: ErrorCode, statusText: ErrorCode+''}`
  is sent.
