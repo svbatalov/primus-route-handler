@@ -62,6 +62,7 @@ module.exports = function (spark, router) {
 
     res.json = res.send;
     res.end = res.send;
+    res.setHeader = function () {};
 
     var req = {
       url: path,
@@ -69,6 +70,9 @@ module.exports = function (spark, router) {
       query: query,
       body: data,
       method: (method || data && data.method || 'get').toLowerCase(),
+      headers: {
+        'content-type': 'application/json'
+      },
     };
 
     var fin = function fin (err) {
