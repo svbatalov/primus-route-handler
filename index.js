@@ -1,6 +1,8 @@
 var qs     = require('qs');
 var log    = require('debug')('primus-express-router');
 
+var httpStatus = require('http-status');
+
 /**
  *  Returns a callback to reemit 'api' requests
  *  on 'router' with express-like req, res
@@ -63,6 +65,11 @@ module.exports = function (spark, router) {
     res.json = res.send;
     res.end = res.send;
     res.setHeader = function () {};
+    res.sendStatus = function (status) {
+      var text = '';
+      (typeof status === 'number') && (text = httpStatus[status]);
+      this.status(status).send(text);
+    };
 
     var req = {
       url: path,
