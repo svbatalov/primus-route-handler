@@ -31,7 +31,7 @@ router.get('/user/:id', function (req, res) {
 var ws_api_handler = require('primus-route-handler');
 
 primus.on('connection', function (spark) {
-		spark.on('api', ws_api_handler(spark, router));
+	spark.on('api', ws_api_handler(spark, router));
 });
 ```
 Client:
@@ -79,7 +79,8 @@ mounted into your express app to handle AJAX requests.
 
 #### req
 Available standard express fields are: `req.url`, `req.query` 
-(parsed with [qs](https://github.com/hapijs/qs)), `req.body`, `req.method`.
+(parsed with [qs](https://github.com/hapijs/qs)), `req.body`, `req.method`,
+`req.headers={'content-type': 'application/json'}` (default).
 Additionally `req.spark` is available in case you want to do something specific
 and do not plan to use this route for ajax. You can get original request object
 via `req.spark.request`.
@@ -105,6 +106,29 @@ api.post('/user', {name: 'Vasja', age: 50}, function (err, res) {...});
  is returned to client.
 - If `next(ErrorCode)` is used then `{status: ErrorCode, statusText: ErrorCode+''}`
  is sent.
- 
+
+### restify
+You can generate REST routes for your Mongoose models using
+[express-restify-mongoose](https://florianholzapfel.github.io/express-restify-mongoose/):
+```
+var router = express.Router();
+var restify = require('express-restify-mongoose');
+restify.serve(router, SomeMongooseModel);
+```
+Resulting `router` can be used to provide access to `SomeMongooseModel` over HTTP:
+```
+app.use(router);
+```
+as well as to provide the same routes over websocket:
+```
+primus.on('connection', function (spark) {
+	spark.on('api', ws_api_handler(spark, router));
+});
+```
+
+Other modules working with `express.Router()` should work with `primus-route-handler`
+too (with minor tweaks maybe). This is actually the whole point of this module
+-- to re-use existing core as much as possible.
+
 ### License
 MIT
