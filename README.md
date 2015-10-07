@@ -128,7 +128,7 @@ primus.on('connection', function (spark) {
 
 Other modules working with `express.Router()` should work with `primus-route-handler`
 too (with minor tweaks maybe). This is actually the whole point of this module
--- to re-use existing core as much as possible.
+-- to re-use existing code as much as possible.
 
 ### License
 MIT
