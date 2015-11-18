@@ -4,7 +4,8 @@
   "description": "Connect express router to Primus.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "node_modules/istanbul/lib/cli.js cover _mocha -- -R spec"	
   },
   "keywords": [
     "express",
@@ -19,5 +20,13 @@
     "http-status": "^0.2.0",
     "qs": "^5.1.0"
   },
-  "browser": "browser.js"
+  "browser": "browser.js",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "express": "^4.13.3",
+    "istanbul": "^0.4.0",
+    "mocha": "^2.3.4",
+    "primus.io": "^3.2.0",
+    "ws": "^0.8.0"
+  }
 }

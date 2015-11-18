@@ -5,6 +5,10 @@ module.exports = function (socket, chan) {
       path[0] !== '/' && (path = '/' + path);
       var p = meth + '::' + path;
       console.log('send', chan||'api', p, data, cb);
+      var meta = {
+        path: p,
+        meth: meth,
+      };
       socket.send(chan || 'api', p, data, cb);
     },
     get: function (path, data, cb) {

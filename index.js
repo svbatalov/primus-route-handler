@@ -68,7 +68,7 @@ module.exports = function (spark, router) {
     res.sendStatus = function (status) {
       var text = '';
       (typeof status === 'number') && (text = httpStatus[status]);
-      this.status(status).send(text);
+      this.status(status, text).send();
     };
 
     var req = {
