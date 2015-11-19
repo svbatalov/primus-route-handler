@@ -1,6 +1,6 @@
 {
   "name": "primus-route-handler",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Connect express router to Primus.",
   "main": "index.js",
   "scripts": {
