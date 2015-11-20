@@ -30,11 +30,6 @@ describe("Client-server tests", function () {
       next(500);
     });
 
-    router.get('/double-send', function (req, res, next) {
-      res.send(1);
-      res.send(2);
-    });
-
     router.get('/error/:status', function (req, res) {
       var status = req.params.status;
       status = parseInt(status, 10);
