@@ -1,10 +1,10 @@
 var assert = require('chai').assert;
+var api_handler = require('../');
+var express = require('express');
+var Primus = require('primus.io');
 
 describe("Client-server tests", function () {
 
-  var api_handler = require('../');
-  var express = require('express');
-  var Primus = require('primus.io');
   var app = express();
   var router = express.Router();
   var port = process.env.PORT || 5555;
@@ -30,7 +30,7 @@ describe("Client-server tests", function () {
       next(500);
     });
 
-    router.get('/double-send', function (req, res) {
+    router.get('/double-send', function (req, res, next) {
       res.send(1);
       res.send(2);
     });
@@ -60,7 +60,7 @@ describe("Client-server tests", function () {
   });
 
   describe('raw interface', function () {
-  
+
     it('should ping the server and receive pong', function (done) {
       client.send('api', '/ping', function (err, res) {
         assert.isNull(err);
@@ -116,20 +116,6 @@ describe("Client-server tests", function () {
       });
     });
 
-    it('should specify data/path/method as object', function (done) {
-      var body = {
-        string: 'this is a string',
-        pi: 3.1415,
-        path: '/get-req',
-        method: 'post'
-      };
-      client.send('api', body, function (err, req) {
-        assert.isNull(err);
-        assert.deepEqual(req.body, body);
-        done();
-      });
-    });
-
     it('should assume path /', function (done) {
       var body = {};
       client.send('api', body, function (err, res) {
@@ -161,10 +147,33 @@ describe("Client-server tests", function () {
       });
     });
 
+    it('should reset content-type', function (done) {
+      client.send('api', {
+        path: '/get-req',
+        headers: {
+          'content-type': 'application/xml'
+        }
+      }, function (err, req) {
+        assert.isNull(err);
+        assert.deepEqual(req.headers, {
+          'content-type': 'application/xml'
+        });
+        done();
+      });
+    });
+
+    it('should not consider error code 200 as actual error', function (done) {
+      client.send('api', '/error/200', function (err, res) {
+        assert.isNull(err);
+        assert.isUndefined(res);
+        done();
+      });
+    });
+
   });
 
   describe('browser lib', function () {
-  
+
     it('should do GET request', function (done) {
       api.get('/get-req', function (err, res) {
         assert.isNull(err);
@@ -214,4 +223,5 @@ describe("Client-server tests", function () {
       });
     });
   });
+
 });

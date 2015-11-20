@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
-    "coverage": "node_modules/istanbul/lib/cli.js cover _mocha -- -R spec"	
+    "coverage": "node_modules/istanbul/lib/cli.js cover _mocha -- -R spec"
   },
   "keywords": [
     "express",
@@ -18,7 +18,8 @@
   "dependencies": {
     "debug": "^2.2.0",
     "http-status": "^0.2.0",
-    "qs": "^5.1.0"
+    "qs": "^5.1.0",
+    "xtend": "^4.0.1"
   },
   "browser": "browser.js",
   "devDependencies": {
