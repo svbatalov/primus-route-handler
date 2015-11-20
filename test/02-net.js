@@ -217,6 +217,15 @@ describe("Client-server tests", function () {
         done();
       });
     });
-  });
 
+    it('should accept metadata object as first argument', function (done) {
+      var headers = {'X-TEST': 'bla bla'};
+      api.post({path: 'get-req', headers: headers}, function (err, req) {
+        assert.isNull(err);
+        assert.equal(req.headers['X-TEST'], headers['X-TEST']);
+        done();
+      });
+    });
+
+  });
 });
