@@ -1,4 +1,5 @@
 var qs     = require('qs');
+var xtend  = require('xtend');
 var log    = require('debug')('primus-express-router');
 
 var httpStatus = require('http-status');
@@ -15,38 +16,35 @@ var httpStatus = require('http-status');
  *
  *  @param {spark} Primus spark object
  *  @param {router} Express router
- *  @return {Function} primus event handler (path, data, fn)
+ *  @return {Function} primus event handler (metadata || String, data, fn)
  **/
 module.exports = function (spark, router) {
-  return function (path, data, fn) {
+  return function (meta, data, fn) {
 
-    var method;
-
-    if ('string' !== typeof path) {
-      fn = data;
-      data = path;
-      path = data && data.path || '/';
+    if ('string' === typeof meta) {
+      /::/.test(meta) || (meta = 'GET::'+meta);
+      var parts = meta.split('::');
+      meta = {
+        meth: parts[0],
+        path: parts[1],
+      };
     }
 
     if ('function' === typeof data) {
       fn = data;
       data = null;
     }
-
-    // parse querystring if present
-    var parts = path.split('?');
-    var query = qs.parse( parts[1] );
-
-    parts = path.split('::');
-    if (parts.length === 2) {
-      method = parts[0];
-      path = parts[1];
-    }
+    meta.meth    = (meta.meth || 'get').toLowerCase();
+    meta.path    = meta.path || '/';
+    meta.query   = meta.query || qs.parse( meta.path.replace(/.*\?/, '') );
+    meta.headers = meta.headers || {};
 
     var res = {
       sent: false,
       status: function (code, text) {
-        if (code !== 200) { this.error = {status: code, statusText: text}; }
+        if (code !== 200) {
+          this.error = {status: code, statusText: text};
+        }
         this.statusCode = code;
         this.statusText = text;
         return this;
@@ -64,7 +62,7 @@ module.exports = function (spark, router) {
 
     res.json = res.send;
     res.end = res.send;
-    res.setHeader = function () {};
+    res.setHeader = function (k, v) {};
     res.sendStatus = function (status) {
       var text = '';
       (typeof status === 'number') && (text = httpStatus[status]);
@@ -72,14 +70,12 @@ module.exports = function (spark, router) {
     };
 
     var req = {
-      url: path,
+      url: meta.path,
       spark: spark,
-      query: query,
+      query: meta.query,
       body: data,
-      method: (method || data && data.method || 'get').toLowerCase(),
-      headers: {
-        'content-type': 'application/json'
-      },
+      method: meta.meth,
+      headers: xtend({ 'content-type': 'application/json' }, meta.headers),
     };
 
     var fin = function fin (err) {

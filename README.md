@@ -37,6 +37,7 @@ primus.on('connection', function (spark) {
 Client:
 ```
 var socket = new Primus('http://localhost:3000');
+// This triggers GET /user/:id route defined above:
 socket.send('api', '/user/1234', function (err, userinfo) {
 	if (err) {
 		// handle error
@@ -47,25 +48,16 @@ socket.send('api', '/user/1234', function (err, userinfo) {
 });
 ```
 
-Alternatively you can specify path as part of your data:
-```
-socket.send('api', {path: '/user/1234'}, cb);
-```
-Also you can specify method in the data object, if it matters for your routes:
-
-Client:
-```
-socket.send('api', {path: '/user', method: 'post', user: {name: 'john', age: 30}}, cb);
-```
-Server:
-```
-router.post('/user', addUser)
-```
-
-Preferred way to specify path and optionally method is to use
+Simple way to specify path and optionally method is to use
 string argument of the form `METHOD::PATH`
 ```
 socket.send('api', 'POST::/user', {name: 'john', age: 30}, cb);
+```
+Alternatively one can pass an object with fields `path` (`/` by default), `meth` (`get`),
+`headers` (`{content-type: 'application/json'}`),
+`query` (if this field is not provided the query will be extracted from path and parsed):
+```
+socket.send('api', {meth: 'post', path: '/user'}, {name: 'john', age: 30}, cb);
 ```
 
 Method defaults to `'get'`.
