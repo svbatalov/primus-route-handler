@@ -39,6 +39,10 @@ module.exports = function (spark, router) {
     meta.query   = meta.query || qs.parse( meta.path.replace(/.*\?/, '') );
     meta.headers = meta.headers || {};
 
+    if (meta.path[0] !== '/') {
+      meta.path = '/' + meta.path;
+    }
+
     var res = {
       sent: false,
       status: function (code, text) {

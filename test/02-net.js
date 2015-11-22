@@ -227,5 +227,24 @@ describe("Client-server tests", function () {
       });
     });
 
+    it('should decorate api._send() to pass token in headers', function (done) {
+       api._old = api._send;
+       api._send = function (path, meth, data, cb) {
+        var meta = {
+          path: path,
+          headers: {
+            token: 'DEADBEEF'
+          }
+        };
+        this._old.call(this, meta, meth, data);
+       };
+
+       api.get('/get-req', function (err, req) {
+         assert.isNull(err);
+         assert.equal(req.headers.token, 'DEADBEEF');
+         done();
+       });
+    });
+
   });
 });

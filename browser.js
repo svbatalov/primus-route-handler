@@ -8,10 +8,6 @@ module.exports = function (socket, chan) {
         meta.meth = meth;
       }
 
-      if (meta.path[0] !== '/') {
-        meta.path = '/' + meta.path;
-      }
-
       cb || (cb = data, data = null);
 
       socket.send(chan || 'api', meta, data, cb);
